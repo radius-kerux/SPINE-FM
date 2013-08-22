@@ -1,0 +1,30 @@
+path cases
+
+	modifier/folder/folder/controller
+	modifier/class/method
+	
+	folder1/folder/folder/controller/method/param1/param2
+		check if file_exists(folder-cur)
+			:check if php file (folder-cur.php)
+				:check if folder-curController (class) 
+					:pass params (array) globalRegistry
+						:invoke class
+							:invoke methodAction
+			else: append next segment
+				:loop
+		else:get default controller folder
+			check if default controller folder exists
+				:check if default phpfile exists
+					:check default class exists
+						:pass parameters
+							:invoke class
+								:invoke method
+				else::die('error')
+		else:
+			:check if default phpfile exists
+				:check default class exists
+					:pass parameters
+						:invoke class
+							:invoke method				
+	
+	controller/method/params
