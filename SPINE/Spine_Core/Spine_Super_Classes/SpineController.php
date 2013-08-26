@@ -31,7 +31,7 @@ class Spine_SuperController extends Spine_Master
 	
 	protected function renderStyleSheet($index = 'global_stylesheet', $value = 'main/main.css')
 	{
-		$index = 'global_stylesheet'; 
+		//$index = 'global_stylesheet'; 
 		$value = $value;
 		Spine_GlobalRegistry::register('stylesheets', $index, $value);
 	}

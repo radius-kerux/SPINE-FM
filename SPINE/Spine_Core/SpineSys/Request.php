@@ -11,7 +11,7 @@ class Spine_Request
 		Spine_GlobalRegistry::register('request', 'uri_path', $this->uri['path']);
 		Spine_GlobalRegistry::register('request', 'original_uri_path_array', explode('/', $this->uri['path']));
 		Spine_GlobalRegistry::register('request', 'uri_path_array', $this->constructRequest(explode('/', $this->uri['path'])));
-
+		
 		/*	if (($this->uri['path'] !== '') && ($this->uri['path'] !== '/'))
 		{
 			$this->uri_path_array = explode('/', rtrim(ltrim($this->uri['path'], '/'), '/'));
@@ -25,10 +25,10 @@ class Spine_Request
 	private function constructRequest($path = FALSE)
 	{
 		$new_path = array();
-		
-		if (!empty($path))
+		$filename	=	SITE.DS.'routes.php';
+		//var_dump($path);
+		if (!empty($path) && ($path[0] !== ""))
 		{
-			$filename	=	SITE.DS.'routes.php';
 			if	(file_exists($filename))
 			{
 				include $filename;
@@ -48,7 +48,7 @@ class Spine_Request
 							if (isset($routes[$route]))
 							{
 								$routes				=	$routes[$route];
-								$new_path[$index]	=	$routes['name'];
+								$new_path[$index]	=	$routes['_name'];
 							}
 							else
 							{
@@ -70,8 +70,28 @@ class Spine_Request
 			{
 				$new_path	=	$path;
 			}
+			return $new_path;
 		}
-		return $new_path;
+		else
+		{
+			if (file_exists($filename))
+			{
+				include $filename;
+				
+				if (isset($routes))
+				{
+					if ($routes !== FALSE)
+					{
+						$new_path[0]	=	$routes['_default'];
+						return $this->constructRequest($new_path);
+					}
+					else
+						return $path;
+				}
+				else
+					die('$routes is not set in '.$filename);
+			}
+		}
 	}
 	
 	private function traverseRoute($route, $routes)

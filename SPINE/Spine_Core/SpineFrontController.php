@@ -25,16 +25,27 @@ class Spine_FrontController
 		
 		include 'SpineDirectoryStructure.php';
 		include SPINE_SYS.DS.'GlobalRegistry.php';
-		
 		$this->startSession();
 		$this->includeSuperClasses();
+	}
+	
+	public function init()
+	{
 		$this->initializeSystem();
 		$this->handleUserRequest();
 		$this->handleRequestOverride();
+		$this->execPredefOverride();
 		$this->setUpRouting();
+		$this->execPredefOverride();
 		$this->dispatch();
 		$this->response();
 		die();
+	}
+	
+	public function install()
+	{
+		include SPINE_CLASSES.DS.'install'.DS.'install.php';
+		new install();
 	}
 	
 	private function includeSuperClasses()
@@ -74,6 +85,18 @@ class Spine_FrontController
 		Spine_GlobalRegistry::getRegistryValue('instance', 'request_override')->analyzeRequest();
 		$this->_userRequest = Spine_GlobalRegistry::getRegistryValue('request', 'uri_path_array');
 		//var_dump(Spine_GlobalRegistry::getRegistryValue('request', 'uri_path_array'));die;
+	}
+	
+	private function execPredefOverride()
+	{
+		if (Spine_GlobalRegistry::getRegistryValue('override', 'install'))
+		{
+			include SPINE_CLASSES.DS.'install'.DS.'install.php';
+			new install();
+		}
+		
+		if (Spine_GlobalRegistry::getRegistryValue('override', 'showgr'))
+			Spine_GlobalRegistry::viewRegistryContent();
 	}
 	
 	private function setUpRouting()

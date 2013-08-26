@@ -25,6 +25,19 @@ class Spine_DefaultOverride extends Spine_OverrideAbstract
 		'php_info'			=>	array(
 			'call_back'		=>	'showPHPInfo',
 			'exit'			=>	TRUE	
+		),
+		
+		'spine-gr-diag'		=>	array(
+			'call_back'		=>	'showGR'
+		),
+		
+		'_echo'				=>	array(
+			'call_back'		=>	'ec'
+		),
+		
+		'_install'			=>	array(
+			'callback'		=>	'install',
+			'exit'			=>	TRUE
 		)
 	);
 	

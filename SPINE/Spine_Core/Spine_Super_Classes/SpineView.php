@@ -59,4 +59,10 @@ class Spine_SuperView extends Spine_Master
 		else
 			return FALSE;
 	}
+	
+	public function isActive($controller_name)
+	{
+		if ($this->getRouteController() == $controller_name.'Controller')
+			echo "active";
+	}
 }
