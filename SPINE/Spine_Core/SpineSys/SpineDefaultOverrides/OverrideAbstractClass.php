@@ -30,4 +30,15 @@ abstract class Spine_OverrideAbstract
 	{
 		Spine_GlobalRegistry::register('override', 'install', TRUE);
 	}
+	
+	public function clearCache()
+	{
+		if (is_dir(SITE.'/data/cache/templates/'))
+		{
+			array_map('unlink', glob(SITE.'/data/cache/templates/*'));
+			rmdir(SITE.'/data/cache/templates/');
+			
+			header('location: /');
+		}
+	}
 }

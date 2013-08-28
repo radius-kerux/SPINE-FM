@@ -108,6 +108,26 @@ class Spine_SuperController extends Spine_Master
 		$redirect_url		=	$data['redirect_url'];
 	}
 	
+	protected function cacheOutput($id = '')
+	{
+		$controller	=	Spine_GlobalRegistry::getRegistryValue('route', 'controller');
+		$method		=	Spine_GlobalRegistry::getRegistryValue('route', 'method');
+		$filename	=	SITE.'/data/cache/templates/'.sha1($controller.$method.$id).'.phtml';
+		
+		if (file_exists($filename))
+		{
+			ob_start();
+			include $filename;
+			ob_end_flush();
+			die();
+		}
+		else
+		{
+			Spine_GlobalRegistry::register('response', 'cache_final_template', TRUE);
+			Spine_GlobalRegistry::register('response', 'cache_id', $id);
+		}
+	}
+	
 	/*
 	 * Actions
 	 */

@@ -36,8 +36,11 @@ class Spine_DefaultOverride extends Spine_OverrideAbstract
 		),
 		
 		'_install'			=>	array(
-			'callback'		=>	'install',
+			'call_back'		=>	'install',
 			'exit'			=>	TRUE
+		),
+		'_clearcache'		=>	array(
+			'call_back'		=>	'clearCache'
 		)
 	);
 	
