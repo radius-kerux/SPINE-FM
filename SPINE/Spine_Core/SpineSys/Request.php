@@ -52,7 +52,7 @@ class Spine_Request
 							}
 							else
 							{
-								Spine_GlobalRegistry::register('route', 'params_start_at', $index); 
+								//Spine_GlobalRegistry::register('route', 'params_start_at', $index); 
 								$new_path[$index]	=	$route;
 								$flag				=	FALSE;
 							}
