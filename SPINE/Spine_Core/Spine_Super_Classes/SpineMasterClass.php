@@ -62,4 +62,45 @@ class Spine_Master
 	{
 		return Spine_GlobalRegistry::getRegistryValue('request', 'original_uri_path_array');
 	}
+	
+	public function checkCache($id)
+	{
+		$filename	=	SITE.DS.'data'.DS.'cache'.DS.'query'.DS.md5($id);
+		if (file_exists($filename))
+		{
+			return unserialize(file_get_contents($filename));
+		}
+		else
+			return FALSE;
+	}
+	
+	public function cache($id, $data)
+	{
+		$filename	=	SITE.DS.'data'.DS.'cache'.DS.'query'.DS.md5($id);
+		$data		=	serialize($data);
+		@file_put_contents($filename, $data);
+		
+		if (file_exists($filename))
+			return TRUE;
+		else
+			return FALSE;
+	}
+	
+	public function unsetCache($id)
+	{
+		$filename	=	SITE.DS.'data'.DS.'cache'.DS.'query'.DS.md5($id);
+		
+		if (file_exists($filename))
+		{
+			unlink($filename);
+			return TRUE;
+		}
+		
+		return FALSE;
+	}
+	
+	public function flushCache()
+	{
+		//remove the whole cache/query folder  
+	}
 }
