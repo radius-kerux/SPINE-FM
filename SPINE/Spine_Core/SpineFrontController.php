@@ -62,6 +62,7 @@ class Spine_FrontController
 	{
 		include_once SPINE_SYS.DS.'Request.php';
 		include_once SPINE_SYS.DS.'RequestOverride.php';
+		include_once SPINE_SYS.DS.'RouteAbstractClass.php';
 		include_once SPINE_SYS.DS.'Route.php';
 		include_once SPINE_SYS.DS.'ViewRenderer.php';
 		include_once SPINE_SYS.DS.'Response.php';

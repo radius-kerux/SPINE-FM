@@ -113,7 +113,6 @@ class Spine_SuperController extends Spine_Master
 		$controller	=	Spine_GlobalRegistry::getRegistryValue('route', 'controller');
 		$method		=	Spine_GlobalRegistry::getRegistryValue('route', 'method');
 		$filename	=	SITE.'/data/cache/templates/'.sha1($controller.$method.$id).'.phtml';
-		
 		if (file_exists($filename))
 		{
 			ob_start();
