@@ -40,7 +40,8 @@ class Spine_DefaultOverride extends Spine_OverrideAbstract
 			'exit'			=>	TRUE
 		),
 		'_clearcache'		=>	array(
-			'call_back'		=>	'clearCache'
+			'call_back'		=>	'clearCache',
+			'exit'			=>	TRUE
 		)
 	);
 	

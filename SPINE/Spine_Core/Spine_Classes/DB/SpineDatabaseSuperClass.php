@@ -7,7 +7,7 @@ class Spine_DB
 	{
 		try
 		{
-			return new PDO('mysql:host'.DATABASE_HOSTNAME.';dbname='.DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD);
+			return new PDO('mysql:host='.DATABASE_HOSTNAME.';dbname='.DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD);
 		}
 		catch (PDOException $e)
 		{

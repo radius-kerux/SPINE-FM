@@ -24,6 +24,14 @@ class Spine_GlobalRegistry
 			return false;
 	}
 	
+	public static function removeInRegistry( $designation, $index )
+	{
+		if ( isset( self::$globalRegistry[$designation][$index] ) )
+			unset( self::$globalRegistry[$designation][$index] );
+		
+		return TRUE;
+	}
+	
 	public static function getDesignationArray($designation = 'overrides')
 	{
 		if (isset(self::$globalRegistry[$designation]))

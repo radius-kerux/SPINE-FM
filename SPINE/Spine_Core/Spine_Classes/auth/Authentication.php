@@ -15,7 +15,7 @@ class Auth
 {
 	private static $instance; //holds the instance of itself
 	
-	final private function __construct() //final private so it cannot be involed outside the class
+	final private function __construct() //final private so it cannot be invoked outside the class
 	{
 		session_start(); //start Session
 	}
@@ -60,6 +60,17 @@ class Auth
 		{
 			$this->redirect($redirect_url);
 		}
+	}
+	
+	public function verifyCredentials( $credentials = array() )
+	{
+		foreach ( $credentials as $index => $value )
+		{
+			if ( Spine_SessionRegistry::getSession('auth', $index) != $value )
+				return FALSE;
+		}
+		
+		return TRUE;
 	}
 	
 	public function redirect($redirect_url	=	'')

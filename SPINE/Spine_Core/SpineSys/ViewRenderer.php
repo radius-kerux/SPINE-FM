@@ -106,6 +106,14 @@ class Spine_ViewRenderer  extends Spine_SuperView
 	
 	public function renderLocalScriptStack()
 	{
+		
+		$parameters_array = Spine_GlobalRegistry::getRegistryValue('response', 'spine::template_parameters');
+
+		if ($parameters_array != false) //passed template parameters
+		{
+			extract($parameters_array);
+		}
+		
 		$final_template = Spine_GlobalRegistry::getRegistryValue('response', 'final_template');
 		$stack = Spine_GlobalRegistry::getDesignationArray('local_scripts');
 		$final_scripts = '';
@@ -132,6 +140,16 @@ class Spine_ViewRenderer  extends Spine_SuperView
 				$final_template = str_replace('<spine::'.$final_scripts_key.'/>',$final_scripts, $final_template);
 			}
 		Spine_GlobalRegistry::register('response', 'final_template', $final_template);
+	}
+	
+	private function extractParams()
+	{
+		$parameters_array = Spine_GlobalRegistry::getRegistryValue('response', 'spine::template_parameters');
+
+		if ($parameters_array != false) //passed template parameters
+		{
+			extract($parameters_array);
+		}
 	}
 	
 }
