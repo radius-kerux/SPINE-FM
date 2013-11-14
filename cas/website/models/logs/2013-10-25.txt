@@ -1,7 +1,0 @@
-Time : 08:26:16
-SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it.
-
-
-Time : 03:42:01
-SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'mon' for key 'username'
-Raw SQL : INSERT INTO users (role, username, password, first_name, last_name, contact_number, email_address, home_address) VALUES (:role, :username, :password, :first_name, :last_name, :contact_number, :email_address, :home_address)

@@ -1,6 +1,6 @@
 <?php
 
-class Upload
+class UploadClass
 {
 	var $maxSize;
 	var $allowedExt;
@@ -40,7 +40,7 @@ class Upload
    		$this->fileInfo['size'] = $_FILES[$uploadName]["size"];
    		$this->fileInfo['temp'] = $_FILES[$uploadName]["tmp_name"]; 
    		
-   		if($this->fileInfo['size']< $this->maxSize)
+   		if($this->fileInfo['size'] < $this->maxSize)
    		{
    			if(strlen($this->allowedExt)>0)
    			{

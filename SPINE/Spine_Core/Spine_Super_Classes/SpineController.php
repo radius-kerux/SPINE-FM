@@ -14,6 +14,8 @@ class Spine_SuperController extends Spine_Master
 	public $spine_authenticate = FALSE; //used in authentication, the default way
 	public $spine_use_main_controller = TRUE; //it sets a flag if the user will use specific main controller or not
 	
+	//------------------------------------------------------------------------------------
+	
 	/**
 	 * 
 	 * renders phtml templates in view folder
@@ -53,6 +55,8 @@ class Spine_SuperController extends Spine_Master
 		}
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	/**
 	 * 
 	 * Renders stylesheets to be compiled in the marked templates
@@ -66,6 +70,33 @@ class Spine_SuperController extends Spine_Master
 		//$value = $value; 
 		Spine_GlobalRegistry::register('stylesheets', $index, $value); //register the stylesheet to global registry
 	}
+	
+	//------------------------------------------------------------------------------------
+	
+	/**
+	 * 
+	 * @param string $index - index/mark inside the templates where the scripts will be embedded
+	 * @param string $value
+	 */
+	
+	protected function renderExternalScript($index = 'local_bottom_script', $stack_name = 'external_local', $value = 'main/local_script.js')
+	{
+		//todo
+		$values_array = Spine_GlobalRegistry::getRegistryValue('external_scripts', $index); //gets the registered scripts in the global registry
+		
+		if ($values_array!==FALSE) //checks if the registry is NOT empty
+		{
+			$values_array[$stack_name]	=	SITE.'/views/'.$value; //adds the script to the array
+			$values_array = array_filter($values_array); //removes empty indexes
+			Spine_GlobalRegistry::register('external_scripts', $index, $values_array); //registers the array of values again
+		}
+		else //if the script registry is empty
+		{
+			Spine_GlobalRegistry::register('external_scripts', $index, array( $stack_name => SITE.'/views/'.$value )); //set the values provided as the first item in the registry
+		}
+	}
+	
+	//------------------------------------------------------------------------------------
 	
 	/**
 	 * 
@@ -92,6 +123,15 @@ class Spine_SuperController extends Spine_Master
 		}
 	}
 	
+	//------------------------------------------------------------------------------------
+	
+	protected function renderInPageScript($index = 'local_bottom_script', $value = 'main/local_script.js')
+	{
+		$this->renderLocalScript($index = 'local_bottom_script', $value = 'main/local_script.js');
+	}
+	
+	//------------------------------------------------------------------------------------
+	
 	/**
 	 * 
 	 * Renders global scripts in the marked templates
@@ -99,10 +139,12 @@ class Spine_SuperController extends Spine_Master
 	 * @param string $value - path of the scripts 
 	 */
 	
-	protected function renderGlobalScript($index = 'global_script', $value = 'main/global_script.js')
+	protected function renderGlobalScript($index, $value = 'main/global_script.js')
 	{
 		Spine_GlobalRegistry::register('global_scripts', $index, $value); //registers the scripts	
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	/**
 	 * 
@@ -119,11 +161,13 @@ class Spine_SuperController extends Spine_Master
 			$spine_classes_paths[0] = $temp_string; //set the temporary variable as the first value of the array
 		}
 			
-		foreach ($spine_classes_paths as $spine_class_path) //travers thru the array of paths
+		foreach ($spine_classes_paths as $spine_class_path) //traverse thru the array of paths
 		{
 			include_once SPINE_CLASSES.DS.$spine_class_path.'.php'; //include the paths
 		}
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	/**
 	 * 
@@ -139,6 +183,8 @@ class Spine_SuperController extends Spine_Master
  		}
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	public function authenticate()
 	{
 		if ($this->spine_authenticate)
@@ -150,12 +196,16 @@ class Spine_SuperController extends Spine_Master
 			return false;
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	public function doAuth($data	=	array())
 	{
 		require_once SPINE_CLASSES.DS.'auth'.DS.'Authentication.php';
 		$database_object	=	$data['db_object'];
 		$redirect_url		=	$data['redirect_url'];
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	/**
 	 * 
@@ -185,6 +235,8 @@ class Spine_SuperController extends Spine_Master
 		}
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	/**
 	 * 
 	 * Sets 404 template that will be used 
@@ -196,11 +248,15 @@ class Spine_SuperController extends Spine_Master
 		Spine_GlobalRegistry::register('response', '404_template', $template); //registers the template 
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	/*
 	 * Actions
 	 */
 	
 	public function indexAction(){}
+	
+	//------------------------------------------------------------------------------------
 	
 	public function _404Action()
 	{
@@ -208,6 +264,8 @@ class Spine_SuperController extends Spine_Master
 		header('HTTP/1.0 404 Not Found');
 		echo $template?$template:"<h1>404 Page not found!</h1>";
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	public function main(){}
 	public function end(){}

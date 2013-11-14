@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * Enter description here ...
+ * @author Raymond Baldonado
+ *
+ */
+
 class Spine_Master
 {
 	protected function loadModel($model_class_path = '')
@@ -23,7 +30,7 @@ class Spine_Master
 		return Spine_GlobalRegistry::getRegistryValue('route', 'method');
 	}
 	
-	protected  function getParameters()
+	protected function getParameters()
 	{
 		$parameters_array = Spine_GlobalRegistry::getRegistryValue('route', 'parameters_array');
 		if (isset($parameters_array))

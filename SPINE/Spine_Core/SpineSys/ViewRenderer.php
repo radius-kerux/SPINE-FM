@@ -1,10 +1,20 @@
 <?php
-
+/**
+ * 
+ * Renders phtml files so php can send them to client's browser
+ * @author Raymond Baldonado
+ *
+ */
 class Spine_ViewRenderer  extends Spine_SuperView
 {
+	/**
+	 * 
+	 * Process the stackfull of phtml referrences for browser display
+	 */
 	
 	public function renderTemplateStack()
 	{
+		//get the stack stored in global registry under templates designation
 		$stack = Spine_GlobalRegistry::getDesignationArray('templates');
 		$parameters_array = Spine_GlobalRegistry::getRegistryValue('response', 'spine::template_parameters');
 
@@ -12,7 +22,7 @@ class Spine_ViewRenderer  extends Spine_SuperView
 		{
 			extract($parameters_array);
 		}
-			
+		//gets the passed parameters via url in the registry 	
 		if (count (Spine_GlobalRegistry::getRegistryValue('request', 'parameters_array')) != 0)
 			self::$spine_url_parameters = Spine_GlobalRegistry::getRegistryValue('request', 'parameters_array');
 			
@@ -20,21 +30,21 @@ class Spine_ViewRenderer  extends Spine_SuperView
 		
 		foreach($stack as $key => $template)
 		{
-			if (strpos($key, 'REMOVE'))
+			if (strpos($key, 'REMOVE')) //using REMOVE keyword to ommit a defined section
 			{
 				$final_template = str_replace('<spine::'.$key.'/>', '', $final_template);
 			}
-			elseif (strpos($key, 'main_phtml') !== false) //main_phtml is the top template
+			elseif (strpos($key, 'main_phtml') !== false) //main_phtml is the top template, render the top template first
 			{
 				if (file_exists($template))
 				{
-					ob_start();
+					ob_start(); //object buffer to get the contents
 					include_once $template;
 					$final_template = ob_get_contents();
 					ob_end_clean();
 				}
 				else 
-					die('Where is your main template?');
+					die('main_phtml is missing.');
 			}
 			elseif (file_exists($template))
 			{
@@ -50,13 +60,21 @@ class Spine_ViewRenderer  extends Spine_SuperView
 		Spine_GlobalRegistry::register('response', 'final_template', $final_template);
 	}
 	
-	public function renderStylesheetStack()
+	//------------------------------------------------------------------------------------
+	
+	/**
+	 * 
+	 * Renders stackfull of css to a single css file 
+	 * that is located at data/cache/spine.cache.css
+	 */
+	
+	public function renderStylesheetStack($stylesheet_key = 'global_stylesheet', $filename = 'spine')
 	{
 		$final_template = Spine_GlobalRegistry::getRegistryValue('response', 'final_template');
 		$stack = Spine_GlobalRegistry::getDesignationArray('stylesheets');
 
 		$final_stylesheets = '';
-		$final_stylesheets_key = 'global_stylesheet';
+		$final_stylesheets_key = $stylesheet_key;
 		
 		if ($stack !== false)
 			foreach($stack as $key => $stylesheet)
@@ -73,17 +91,25 @@ class Spine_ViewRenderer  extends Spine_SuperView
 			}
 		
 		file_put_contents(SITE.'/data/cache/spine.cache.css', $final_stylesheets);
-		$final_template = str_replace('<spine::'.$final_stylesheets_key.'/>', '<link rel="stylesheet" type="text/css" href="/'.SITE.'/data/cache/spine.cache.css">', $final_template);
+		$final_template = str_replace('<spine::'.$final_stylesheets_key.'/>', '<link rel="stylesheet" type="text/css" href="/'.SITE.'/data/cache/'.$filename.'.cache.css">', $final_template);
 		Spine_GlobalRegistry::register('response', 'final_template', $final_template);
 	}
 	
-	public function renderGlobalScriptStack()
+	//------------------------------------------------------------------------------------
+	
+	/**
+	 * 
+	 * Renders the stored scripts in the stack to a single file
+	 * that is located at data/cache/spine.cache.js
+	 */
+	
+	public function renderGlobalScriptStack($final_scripts_key = 'global_script', $filename = 'spine')
 	{
 		$final_template = Spine_GlobalRegistry::getRegistryValue('response', 'final_template');
 		$stack = Spine_GlobalRegistry::getDesignationArray('global_scripts');
 
 		$final_scripts = '';
-		$final_scripts_key = 'global_script'; //find way to put this in a configuration file
+		//$final_scripts_key = 'global_script'; //find way to put this in a configuration file
 		
 		if ($stack !== false)
 			foreach($stack as $key => $script)
@@ -100,9 +126,55 @@ class Spine_ViewRenderer  extends Spine_SuperView
 			}
 
 		file_put_contents(SITE.'/data/cache/spine.cache.js', $final_scripts);
-		$final_template = str_replace('<spine::'.$final_scripts_key.'/>', '<script src="/'.SITE.'/data/cache/spine.cache.js"></script>', $final_template);
+		$final_template = str_replace('<spine::'.$final_scripts_key.'/>', '<script src="/'.SITE.'/data/cache/'.$filename.'.cache.js"></script>', $final_template);
 		Spine_GlobalRegistry::register('response', 'final_template', $final_template);
 	}
+	
+	//------------------------------------------------------------------------------------
+	
+	/**
+	 * 
+	 * Renders the stored scripts in the stack to a single file
+	 * that is located at data/cache/spine.cache.js
+	 */
+	
+	public function renderExternalScriptStack()
+	{
+		$final_template = Spine_GlobalRegistry::getRegistryValue('response', 'final_template');
+		$indexes= Spine_GlobalRegistry::getDesignationArray('external_scripts');
+		$external_scripts_array	=	array();
+		$stack_name	=	'';
+		
+		if ($indexes !== false)
+			foreach($indexes as $index_key => $index)
+			{
+				$final_scripts = '';
+				foreach ($index as $stack_key => $script)
+				{
+					if (file_exists($script))
+					{
+						ob_start();
+						include_once $script;
+						$final_scripts .= ob_get_contents();				
+						ob_end_clean();
+					}
+					else
+						die('what is happening with script?');
+					$stack_name	=	$stack_key;
+				}
+				
+				file_put_contents(SITE.'/data/cache/'.$index_key.'.cache.js', $final_scripts);
+				$final_template = str_replace('<spine::'.$index_key.'/>', '<script src="/'.SITE.'/data/cache/'.$index_key.'.cache.js"></script>', $final_template);
+				Spine_GlobalRegistry::register('response', 'final_template', $final_template);
+			}
+	}
+	
+	//------------------------------------------------------------------------------------
+	
+	/**
+	 * 
+	 * renders local script stored in the stack
+	 */
 	
 	public function renderLocalScriptStack()
 	{
@@ -141,6 +213,14 @@ class Spine_ViewRenderer  extends Spine_SuperView
 			}
 		Spine_GlobalRegistry::register('response', 'final_template', $final_template);
 	}
+	
+	//------------------------------------------------------------------------------------
+	
+	/**
+	 * 
+	 * extract the parameters passed in the templates so the indexes of parameters in array format
+	 * can be used as a variable
+	 */
 	
 	private function extractParams()
 	{

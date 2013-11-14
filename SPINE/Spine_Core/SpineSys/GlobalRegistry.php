@@ -10,11 +10,15 @@ class Spine_GlobalRegistry
 	
 	private static $globalRegistry = array();
 	
+	//------------------------------------------------------------------------------------
+	
 	public static function register($designation = 'overrides', $index = 'default', $value = '__radius__' )
 	{
 		//if (!isset(self::$globalRegistry[$designation][$index]))
 			self::$globalRegistry[$designation][$index] = $value;
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	public static function getRegistryValue($designation = 'overrides', $index = 'default')
 	{
@@ -24,6 +28,8 @@ class Spine_GlobalRegistry
 			return false;
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	public static function removeInRegistry( $designation, $index )
 	{
 		if ( isset( self::$globalRegistry[$designation][$index] ) )
@@ -32,6 +38,8 @@ class Spine_GlobalRegistry
 		return TRUE;
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	public static function getDesignationArray($designation = 'overrides')
 	{
 		if (isset(self::$globalRegistry[$designation]))
@@ -39,6 +47,8 @@ class Spine_GlobalRegistry
 		else
 			return false;
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	public static function viewRegistryContent()
 	{
