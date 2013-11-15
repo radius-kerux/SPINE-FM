@@ -6,10 +6,14 @@ class Spine_Dispatcher
 	//dispatch 
 	// 
 	
+	//------------------------------------------------------------------------------------
+	
 	public function override($override_array)
 	{
 		
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	public function dispatchMainController($main_controller_path = "", $main_controller = MAIN_CONTROLLER)
 	{
@@ -54,6 +58,8 @@ class Spine_Dispatcher
 		
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	public function dispatchRoute()
 	{
 		$controller = Spine_GlobalRegistry::getRegistryValue('route', 'controller');
@@ -97,6 +103,8 @@ class Spine_Dispatcher
 			$this->dispatchRoute();
 		}
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	public function authenticateDispatch($instance_of_controller)
 	{

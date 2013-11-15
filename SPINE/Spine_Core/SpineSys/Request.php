@@ -5,6 +5,8 @@ class Spine_Request
 	private $uri;
 	private $user_defined_routes;
 	
+	//------------------------------------------------------------------------------------
+	
 	public function requestHandler()
 	{
 		$this->uri = parse_url($_SERVER['REQUEST_URI']);
@@ -19,11 +21,15 @@ class Spine_Request
 			$this->uri_path_array = explode('/', rtrim(ltrim($this->uri['path'], '/'), '/'));
 		}
 		//$this->analyzeUriPath();
-	*/}
+	*/
+	}
 	/**
 	 * constructs request based on user defined configuration
 	 * @param Array $path - contains the exploded URL as requested by the user
 	 */
+		
+	//------------------------------------------------------------------------------------
+	
 	private function constructRequest($path = FALSE)
 	{
 		$routes	=	$this->user_defined_routes;
@@ -83,6 +89,8 @@ class Spine_Request
 		}
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	private function getUserDefinedRouting()
 	{
 		$filename	=	SITE.DS.'routes.php';
@@ -97,6 +105,8 @@ class Spine_Request
 		return FALSE;
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	private function traverseRoute($route, $routes)
 	{
 		if (isset($routes[$route]))
@@ -105,6 +115,8 @@ class Spine_Request
 			
 		}
 	}
+	
+	//------------------------------------------------------------------------------------
 		
 	public function analyzeUri()
 	{

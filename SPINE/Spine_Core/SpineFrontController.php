@@ -9,8 +9,12 @@ class Spine_FrontController
 	private $_instanceOfViewRenderer;
 	private $_instanceOfGlobalRegistry;
 	
+	//------------------------------------------------------------------------------------
+	
 	private $_userRequest;
 	private $_instanceOfController;
+	
+	//------------------------------------------------------------------------------------
 	
 	public function __construct()
 	{
@@ -29,6 +33,8 @@ class Spine_FrontController
 		$this->includeSuperClasses();
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	public function init()
 	{
 		$this->initializeSystem();
@@ -42,11 +48,15 @@ class Spine_FrontController
 		die();
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	public function install()
 	{
 		include SPINE_CLASSES.DS.'install'.DS.'install.php';
 		new install();
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	private function includeSuperClasses()
 	{
@@ -57,6 +67,8 @@ class Spine_FrontController
 		include SPINE_SUPER_CLASSES.DS.'SpineMainInterface.php';
 		include SPINE_SUPER_CLASSES.DS.'SpineBlock.php';
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	private function initializeSystem()
 	{
@@ -75,11 +87,15 @@ class Spine_FrontController
 		Spine_GlobalRegistry::register('instance', 'response', new Spine_Response());
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	private function handleUserRequest()
 	{
 		Spine_GlobalRegistry::getRegistryValue('instance', 'request')->requestHandler();
 		$this->_userRequest = Spine_GlobalRegistry::getRegistryValue('request', 'uri_path_array');
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	private function handleRequestOverride()
 	{
@@ -87,6 +103,8 @@ class Spine_FrontController
 		$this->_userRequest = Spine_GlobalRegistry::getRegistryValue('request', 'uri_path_array');
 		//var_dump(Spine_GlobalRegistry::getRegistryValue('request', 'uri_path_array'));die;
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	private function execPredefOverride()
 	{
@@ -99,6 +117,8 @@ class Spine_FrontController
 		if (Spine_GlobalRegistry::getRegistryValue('override', 'showgr'))
 			Spine_GlobalRegistry::viewRegistryContent();
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	private function setUpRouting()
 	{
@@ -113,16 +133,22 @@ class Spine_FrontController
 		Spine_GlobalRegistry::getRegistryValue('instance', 'route')->setParameters();
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	private function dispatch()
 	{
 		Spine_GlobalRegistry::getRegistryValue('instance', 'dispatcher')->dispatchMainController();
 		Spine_GlobalRegistry::getRegistryValue('instance', 'dispatcher')->dispatchRoute();
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	private function response()
 	{
 		Spine_GlobalRegistry::getRegistryValue('instance', 'response')->displayOutput();
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	private function startSession()
 	{
@@ -135,6 +161,8 @@ class Spine_FrontController
 			new Spine_SessionRegistry();
 		}
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	public function test()
 	{

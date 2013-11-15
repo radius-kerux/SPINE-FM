@@ -274,9 +274,25 @@ class Spine_SuperController extends Spine_Master
 		$controller	=	Spine_GlobalRegistry::getRegistryValue('route', 'controller'); //gets the invoked controller
 		$method		=	Spine_GlobalRegistry::getRegistryValue('route', 'method'); //gets the invoked method
 		$filename	=	SITE.'/data/cache/templates/'.sha1($controller.$method.$id).'.phtml'; //set the file path of the cached output
+		
 		if (file_exists($filename)) //checks if the file exists
 		{
-			//load for display the cached out if the file already exists
+			//taken from http://css-tricks.com/snippets/php/intelligent-php-cache-control/
+			$lastModified		=	filemtime($filename);
+			$ifModifiedSince	=	(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : false);
+			$etagFile 			=	md5_file($filename);
+			$etagHeader			=	(isset($_SERVER['HTTP_IF_NONE_MATCH']) ? trim($_SERVER['HTTP_IF_NONE_MATCH']) : false);
+			
+			header("Last-Modified: ".gmdate("D, d M Y H:i:s", $lastModified)." GMT");
+			header('Cache-Control: public');
+			
+			if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $lastModified || $etagHeader == $etagFile)
+			{
+				header("HTTP/1.1 304 Not Modified");
+				 exit;
+			}
+			//------------------------------------------------------------------------------------
+			//load for display the cached output if the file already exists
 			ob_start();
 			include $filename;
 			ob_end_flush();
@@ -318,6 +334,35 @@ class Spine_SuperController extends Spine_Master
 		$template	=	Spine_GlobalRegistry::getRegistryValue('response', '404_template');
 		header('HTTP/1.0 404 Not Found');
 		echo $template?$template:"<h1>404 Page not found!</h1>";
+	}
+	
+	//------------------------------------------------------------------------------------
+	
+	public function setHeaders($page_headers)
+	{
+		$page_headers_array	=	Spine_GlobalRegistry::getRegistryValue('response', 'page_headers');
+		
+		if ($page_headers_array !== FALSE)
+		{
+			if (is_array($page_headers))
+			{
+				$page_headers_array	=	array_merge($page_headers_array, $page_headers);
+				Spine_GlobalRegistry::register('response', 'page_headers', $page_headers_array);
+			}
+			else 
+			{
+				array_push($page_headers_array, $page_headers);
+				Spine_GlobalRegistry::register('response', 'page_headers', $page_headers_array);
+			}
+		}
+		else 
+		{
+			if (is_array($page_headers))
+				$page_headers_array	=	array_filter($page_headers);
+			else
+				$page_headers_array	=	array(0 => $page_headers);
+		}
+		Spine_GlobalRegistry::register('response', 'page_headers', $page_headers_array);
 	}
 	
 	//------------------------------------------------------------------------------------

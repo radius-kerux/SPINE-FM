@@ -168,6 +168,8 @@ class Spine_Route
 		}
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	public function setParameters()
 	{
 		$paramStartsAt = Spine_GlobalRegistry::getRegistryValue('route', 'params_start_at');
@@ -176,11 +178,15 @@ class Spine_Route
 		Spine_GlobalRegistry::register('route', 'parameters_array', $requestUriPathArray);
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	public function test()
 	{
 		var_dump(Spine_GlobalRegistry::getRegistryValue('route', 'controller'));
 		var_dump(Spine_GlobalRegistry::getRegistryValue('route', 'method'));
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	protected function aliasHandler($string)
 	{

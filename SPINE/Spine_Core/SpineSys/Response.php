@@ -10,6 +10,7 @@ class Spine_Response extends Spine_ViewRenderer
 		$this->renderGlobalScriptStack();
 		$this->renderExternalScriptStack();
 		$this->renderLocalScriptStack();
+		$this->sendHeaders();
 		$this->printFinalTemplate();
 	}
 	
@@ -17,6 +18,7 @@ class Spine_Response extends Spine_ViewRenderer
 	
 	private function printFinalTemplate()
 	{
+		//header($string);
 		ob_start();
 		
 		echo Spine_GlobalRegistry::getRegistryValue('response', 'final_template');
@@ -36,5 +38,17 @@ class Spine_Response extends Spine_ViewRenderer
 		}
 		
 		ob_end_flush();
+	}
+	
+	//------------------------------------------------------------------------------------
+	
+	private function sendHeaders()
+	{
+		$headers	=	Spine_GlobalRegistry::getRegistryValue('response', 'page_headers');
+		foreach ($headers as $header)
+		{
+			header($header);
+		}
+	
 	}
 }
