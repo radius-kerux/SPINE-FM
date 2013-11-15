@@ -6,11 +6,14 @@ class Spine_Response extends Spine_ViewRenderer
 	{
 		$this->renderTemplateStack();
 		$this->renderStylesheetStack();
+		$this->renderExternalStylesheetsStack();
 		$this->renderGlobalScriptStack();
 		$this->renderExternalScriptStack();
 		$this->renderLocalScriptStack();
 		$this->printFinalTemplate();
 	}
+	
+	//------------------------------------------------------------------------------------
 	
 	private function printFinalTemplate()
 	{

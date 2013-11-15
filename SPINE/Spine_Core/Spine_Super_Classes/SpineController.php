@@ -59,6 +59,22 @@ class Spine_SuperController extends Spine_Master
 	
 	/**
 	 * 
+	 * Alias of renderTemplate.
+	 * Renders phtml templates in view folder
+	 * @param string $index - key of the template in the stack
+	 * @param string $value - path of the template inside the views folder 
+	 * @param array $params - parameters/data that are needed in the template
+	 */
+	
+	protected function displayPhtml($index = 'main_phtml', $value = 'main/main', $params = "")
+	{
+		$this->renderTemplate($index, $value, $params);
+	}
+	
+	//------------------------------------------------------------------------------------
+	
+	/**
+	 * 
 	 * Renders stylesheets to be compiled in the marked templates
 	 * @param string $index - index/mark-up in the template where the stylesheets will be located
 	 * @param string $value - path of css
@@ -73,27 +89,59 @@ class Spine_SuperController extends Spine_Master
 	
 	//------------------------------------------------------------------------------------
 	
+	protected function includeStyleSheet($index = 'global_stylesheet', $value = 'main/main.css')
+	{
+		$array_of_stylesheets	=	Spine_GlobalRegistry::getRegistryValue('external_stylesheets', $index);
+		
+		if ($array_of_stylesheets !== FALSE)
+		{
+			array_push($array_of_stylesheets, $value);
+			$array_of_stylesheets = array_filter($array_of_stylesheets);
+			Spine_GlobalRegistry::register('external_stylesheets', $index, $array_of_stylesheets);
+		}
+		else 
+		{
+			Spine_GlobalRegistry::register('external_stylesheets', $index, array( 0 => $value ));
+		}
+	}
+	
+	//------------------------------------------------------------------------------------
+	
 	/**
 	 * 
 	 * @param string $index - index/mark inside the templates where the scripts will be embedded
 	 * @param string $value
 	 */
 	
-	protected function renderExternalScript($index = 'local_bottom_script', $stack_name = 'external_local', $value = 'main/local_script.js')
+	protected function renderExternalScript($index = 'local_bottom_script', $value)
 	{
 		//todo
 		$values_array = Spine_GlobalRegistry::getRegistryValue('external_scripts', $index); //gets the registered scripts in the global registry
 		
 		if ($values_array!==FALSE) //checks if the registry is NOT empty
 		{
-			$values_array[$stack_name]	=	SITE.'/views/'.$value; //adds the script to the array
+			//$values_array[$stack_name]	=	SITE.'/views/'.$value; 
+			array_push($values_array, $value); //adds the script to the array
 			$values_array = array_filter($values_array); //removes empty indexes
 			Spine_GlobalRegistry::register('external_scripts', $index, $values_array); //registers the array of values again
 		}
 		else //if the script registry is empty
 		{
-			Spine_GlobalRegistry::register('external_scripts', $index, array( $stack_name => SITE.'/views/'.$value )); //set the values provided as the first item in the registry
+			Spine_GlobalRegistry::register('external_scripts', $index, array( 0 => $value )); //set the values provided as the first item in the registry
 		}
+	}
+	
+	//------------------------------------------------------------------------------------
+	
+	/**
+	 * renderExternalScript - Alias
+	 * @param string $index - index/mark inside the templates where the scripts will be embedded
+	 * @param string $value
+	 */
+	
+	protected function includeExternalScript($index = 'local_bottom_script', $value = 'main/local_script.js')
+	{
+		$this->renderExternalScript($index, $value);
 	}
 	
 	//------------------------------------------------------------------------------------
@@ -125,9 +173,9 @@ class Spine_SuperController extends Spine_Master
 	
 	//------------------------------------------------------------------------------------
 	
-	protected function renderInPageScript($index = 'local_bottom_script', $value = 'main/local_script.js')
+	protected function includeInPageScript($index = 'local_bottom_script', $value = 'main/local_script.js')
 	{
-		$this->renderLocalScript($index = 'local_bottom_script', $value = 'main/local_script.js');
+		$this->renderLocalScript($index, $value);
 	}
 	
 	//------------------------------------------------------------------------------------
@@ -142,6 +190,13 @@ class Spine_SuperController extends Spine_Master
 	protected function renderGlobalScript($index, $value = 'main/global_script.js')
 	{
 		Spine_GlobalRegistry::register('global_scripts', $index, $value); //registers the scripts	
+	}
+	
+	//------------------------------------------------------------------------------------
+	
+	protected function includeGlobalScript($index, $value = 'main/global_script.js')
+	{
+		$this->includeGlobalScript($index, $value); //registers the scripts	
 	}
 	
 	//------------------------------------------------------------------------------------

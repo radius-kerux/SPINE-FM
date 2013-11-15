@@ -68,14 +68,14 @@ class Spine_ViewRenderer  extends Spine_SuperView
 	 * that is located at data/cache/spine.cache.css
 	 */
 	
-	public function renderStylesheetStack($stylesheet_key = 'global_stylesheet', $filename = 'spine')
+	public function renderStylesheetStack()
 	{
-		$final_template = Spine_GlobalRegistry::getRegistryValue('response', 'final_template');
-		$stack = Spine_GlobalRegistry::getDesignationArray('stylesheets');
+		$final_template	=	Spine_GlobalRegistry::getRegistryValue('response', 'final_template');
+		$stack			=	Spine_GlobalRegistry::getDesignationArray('stylesheets');
 
 		$final_stylesheets = '';
-		$final_stylesheets_key = $stylesheet_key;
-		
+		$final_stylesheets_key = 'global_stylesheet';
+		$filename = 'spine';
 		if ($stack !== false)
 			foreach($stack as $key => $stylesheet)
 			{
@@ -87,12 +87,46 @@ class Spine_ViewRenderer  extends Spine_SuperView
 					ob_end_clean();
 				}
 				else
-					die('what is happening with css?');
+					die('what is happening with css? '.$stylesheet);
 			}
 		
-		file_put_contents(SITE.'/data/cache/spine.cache.css', $final_stylesheets);
-		$final_template = str_replace('<spine::'.$final_stylesheets_key.'/>', '<link rel="stylesheet" type="text/css" href="/'.SITE.'/data/cache/'.$filename.'.cache.css">', $final_template);
-		Spine_GlobalRegistry::register('response', 'final_template', $final_template);
+		if (!empty($final_stylesheets))
+		{
+			file_put_contents(SITE.'/data/cache/spine.cache.css', $final_stylesheets);
+			$final_template = str_replace('<spine::'.$final_stylesheets_key.'/>', '<link rel="stylesheet" type="text/css" href="/'.SITE.'/data/cache/'.$filename.'.cache.css">', $final_template);
+			Spine_GlobalRegistry::register('response', 'final_template', $final_template);
+		}
+		
+	}
+	
+	//------------------------------------------------------------------------------------
+	
+	public function renderExternalStylesheetsStack()
+	{
+		$final_template	=	Spine_GlobalRegistry::getRegistryValue('response', 'final_template');
+		$indexes		=	Spine_GlobalRegistry::getDesignationArray('external_stylesheets');
+		
+		if ($indexes !== false)
+			foreach($indexes as $index_key => $index)
+			{
+				$final_stylesheets = '';
+				foreach ($index as $stack_key => $stylesheet)
+				{
+					if (file_exists($stylesheet))
+					{
+						ob_start();
+						include_once $stylesheet;
+						$final_stylesheets .= ob_get_contents();				
+						ob_end_clean();
+					}
+					else
+						die('what is happening with stylesheet? '.$stylesheet);
+
+					file_put_contents(SITE.'/data/cache/'.$index_key.'.cache.css', $final_stylesheets);
+					$final_template = str_replace('<spine::'.$index_key.'/>', '<link rel="stylesheet" type="text/css" href="/'.SITE.'/data/cache/'.$index_key.'.cache.css">', $final_template);
+					Spine_GlobalRegistry::register('response', 'final_template', $final_template);
+				}
+			}
 	}
 	
 	//------------------------------------------------------------------------------------
@@ -105,8 +139,8 @@ class Spine_ViewRenderer  extends Spine_SuperView
 	
 	public function renderGlobalScriptStack($final_scripts_key = 'global_script', $filename = 'spine')
 	{
-		$final_template = Spine_GlobalRegistry::getRegistryValue('response', 'final_template');
-		$stack = Spine_GlobalRegistry::getDesignationArray('global_scripts');
+		$final_template	=	Spine_GlobalRegistry::getRegistryValue('response', 'final_template');
+		$stack			=	Spine_GlobalRegistry::getDesignationArray('global_scripts');
 
 		$final_scripts = '';
 		//$final_scripts_key = 'global_script'; //find way to put this in a configuration file
@@ -124,10 +158,13 @@ class Spine_ViewRenderer  extends Spine_SuperView
 				else
 					die('what is happening with script?');
 			}
-
-		file_put_contents(SITE.'/data/cache/spine.cache.js', $final_scripts);
-		$final_template = str_replace('<spine::'.$final_scripts_key.'/>', '<script src="/'.SITE.'/data/cache/'.$filename.'.cache.js"></script>', $final_template);
-		Spine_GlobalRegistry::register('response', 'final_template', $final_template);
+		if (!empty($final_scripts))
+		{
+			file_put_contents(SITE.'/data/cache/spine.cache.js', $final_scripts);
+			$final_template = str_replace('<spine::'.$final_scripts_key.'/>', '<script src="/'.SITE.'/data/cache/'.$filename.'.cache.js"></script>', $final_template);
+			Spine_GlobalRegistry::register('response', 'final_template', $final_template);
+		}
+		
 	}
 	
 	//------------------------------------------------------------------------------------
@@ -140,10 +177,8 @@ class Spine_ViewRenderer  extends Spine_SuperView
 	
 	public function renderExternalScriptStack()
 	{
-		$final_template = Spine_GlobalRegistry::getRegistryValue('response', 'final_template');
-		$indexes= Spine_GlobalRegistry::getDesignationArray('external_scripts');
-		$external_scripts_array	=	array();
-		$stack_name	=	'';
+		$final_template	=	Spine_GlobalRegistry::getRegistryValue('response', 'final_template');
+		$indexes		=	Spine_GlobalRegistry::getDesignationArray('external_scripts');
 		
 		if ($indexes !== false)
 			foreach($indexes as $index_key => $index)
@@ -159,8 +194,7 @@ class Spine_ViewRenderer  extends Spine_SuperView
 						ob_end_clean();
 					}
 					else
-						die('what is happening with script?');
-					$stack_name	=	$stack_key;
+						die('what is happening with script? '.$script);
 				}
 				
 				file_put_contents(SITE.'/data/cache/'.$index_key.'.cache.js', $final_scripts);
