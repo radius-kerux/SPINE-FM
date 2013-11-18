@@ -45,10 +45,11 @@ class Spine_Response extends Spine_ViewRenderer
 	private function sendHeaders()
 	{
 		$headers	=	Spine_GlobalRegistry::getRegistryValue('response', 'page_headers');
-		foreach ($headers as $header)
-		{
-			header($header);
-		}
-	
+		
+		if ($headers)
+			foreach ($headers as $header)
+			{
+				header($header);
+			}
 	}
 }

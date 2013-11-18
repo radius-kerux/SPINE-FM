@@ -4,7 +4,9 @@ class Spine_SuperView extends Spine_Master
 	private $template_parameter;
 	public static $spine_url_parameters;
 	
-	/*
+	//------------------------------------------------------------------------------------
+	
+	/**
 	 * calls a block within the application
 	 * 
 	 * param $block_class - path of the block class
@@ -35,6 +37,8 @@ class Spine_SuperView extends Spine_Master
 			die('Empty Class? Seriously');
 	}
 	
+	//------------------------------------------------------------------------------------
+	
 	public function displayTemplate($template = '')
 	{
 		$this->template_parameter	=	Spine_GlobalRegistry::getRegistryValue('response', 'spine::template_parameters');
@@ -59,6 +63,15 @@ class Spine_SuperView extends Spine_Master
 		else
 			return FALSE;
 	}
+	
+	//------------------------------------------------------------------------------------
+	
+	public function pinPhtml($template = '')
+	{
+		$this->displayTemplate($template);
+	}
+	
+	//------------------------------------------------------------------------------------
 	
 	public function isActive($controller_name)
 	{

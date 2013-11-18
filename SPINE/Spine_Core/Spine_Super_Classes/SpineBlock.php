@@ -31,4 +31,11 @@ class Spine_SuperBlock extends Spine_Master
 		
 		return $template;
 	}
+	
+	//------------------------------------------------------------------------------------
+	
+	protected function displayPhtml($template, array $params = array())
+	{
+		return	$this->renderTemplate($template, $params);
+	}
 }

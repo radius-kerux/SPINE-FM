@@ -252,8 +252,8 @@ class Spine_ViewRenderer  extends Spine_SuperView
 	
 	/**
 	 * 
-	 * extract the parameters passed in the templates so the indexes of parameters in array format
-	 * can be used as a variable
+	 * Extract parameters passed in the templates
+	 * The array indexes can be accessible as a common variable using their keys as the variables 
 	 */
 	
 	private function extractParams()
