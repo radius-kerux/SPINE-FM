@@ -84,4 +84,9 @@ class Auth
 		Spine_SessionRegistry::unsetSession('auth');
 		header('location: /'.$redirect_url);
 	}
+	
+	public function retrieveCredentials()
+	{
+		return	Spine_SessionRegistry::getSession('auth');
+	}
 }

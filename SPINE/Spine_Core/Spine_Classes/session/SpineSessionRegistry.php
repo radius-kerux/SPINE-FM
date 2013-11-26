@@ -22,8 +22,12 @@ class Spine_SessionRegistry extends Spine_SessionClass
 		$_SESSION[session_id()][$use][$index] = $value;
 	}
 	
-	public static function getSession($use, $index)
+	public static function getSession($use, $index = NULL)
 	{
+		if (is_null($index))
+			if (isset($_SESSION[session_id()][$use]))
+				return $_SESSION[session_id()][$use];
+				
 		if (isset($_SESSION[session_id()][$use][$index]))
 			return $_SESSION[session_id()][$use][$index];
 			

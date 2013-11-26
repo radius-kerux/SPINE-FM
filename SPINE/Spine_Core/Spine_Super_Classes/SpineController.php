@@ -28,7 +28,7 @@ class Spine_SuperController extends Spine_Master
 	{
 		if ( !empty( $value ) )
 		{
-			$value = SITE.'/views/'.$value.'.template.phtml'; //set the path to views folder
+			$value = 'REMOVE' != $value? SITE.'/views/'.$value.'.template.phtml' : 'REMOVE'; //set the path to views folder
 			Spine_GlobalRegistry::register('templates', $index, $value); //registers the template to Spine_GlobalRegistry
 		}
 		else 
@@ -334,6 +334,7 @@ class Spine_SuperController extends Spine_Master
 		$template	=	Spine_GlobalRegistry::getRegistryValue('response', '404_template');
 		header('HTTP/1.0 404 Not Found');
 		echo $template?$template:"<h1>404 Page not found!</h1>";
+		die;
 	}
 	
 	//------------------------------------------------------------------------------------

@@ -78,7 +78,7 @@ class Spine_Dispatcher
 				foreach ($accumulated_path as $path)
 				{
 					$temp_accumulated_path .= $path.DS;
-					$this->dispatchMainController($temp_accumulated_path.$path.'_'.MAIN_CONTROLLER, $path.'_'.MAIN_CONTROLLER);
+					$this->dispatchMainController($temp_accumulated_path.$path.'_'.MAIN_CONTROLLER, $this->aliasHandler($path).'_'.MAIN_CONTROLLER);
 				}
 			}
 			
@@ -109,5 +109,19 @@ class Spine_Dispatcher
 	public function authenticateDispatch($instance_of_controller)
 	{
 		$instance_of_controller->authenticate();			
+	}
+	
+	//------------------------------------------------------------------------------------
+	
+	protected function aliasHandler($string)
+	{
+		$new_string = '';
+		
+		foreach (explode('-', $string) as $index => $value)
+			if ($index != 0)
+				$new_string .= ucfirst($value);
+			else
+				$new_string .= $value;
+		return $new_string;
 	}
 }

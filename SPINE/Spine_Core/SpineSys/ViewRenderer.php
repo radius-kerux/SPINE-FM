@@ -30,7 +30,7 @@ class Spine_ViewRenderer  extends Spine_SuperView
 		
 		foreach($stack as $key => $template)
 		{
-			if (strpos($key, 'REMOVE')) //using REMOVE keyword to ommit a defined section
+			if ($template === 'REMOVE') //using REMOVE keyword to ommit a defined section
 			{
 				$final_template = str_replace('<spine::'.$key.'/>', '', $final_template);
 			}
