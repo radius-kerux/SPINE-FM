@@ -26,7 +26,6 @@ class Spine_SuperModel extends Spine_Master
 	
 	public function __construct()
 	{
-		include_once SPINE_CLASSES.DS.'DB'.DS.'redbean'.DS.'rb.class.php';
 		include_once SPINE_CLASSES.DS.'DB'.DS.'SpineDatabaseSuperClass.php';
 	}
 	

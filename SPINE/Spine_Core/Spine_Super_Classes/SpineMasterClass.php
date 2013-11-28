@@ -20,15 +20,21 @@ class Spine_Master
  		return FALSE;
 	}
 	
+//------------------------------------------------------------------------------------	
+	
 	protected function getRouteController()
 	{
 		return Spine_GlobalRegistry::getRegistryValue('route', 'controller');
 	}
 	
+//------------------------------------------------------------------------------------
+	
 	protected function getRoutedAction()
 	{
 		return Spine_GlobalRegistry::getRegistryValue('route', 'method');
 	}
+
+//------------------------------------------------------------------------------------
 	
 	protected function getParameters()
 	{
@@ -38,6 +44,8 @@ class Spine_Master
 		else
 			return false;
 	}
+
+//------------------------------------------------------------------------------------	
 	
 	protected function getParametersPair($parameter)
 	{
@@ -55,20 +63,28 @@ class Spine_Master
 		}
 	}
 	
+//------------------------------------------------------------------------------------	
+	
 	protected function getRequestUriPath()
 	{
 		return Spine_GlobalRegistry::getRegistryValue('request', 'uri_path');
 	}
 	
+//------------------------------------------------------------------------------------
+	
 	protected function getRequestUriPathArray()
 	{
 		return Spine_GlobalRegistry::getRegistryValue('request', 'uri_path_array');
 	}
+	
+//------------------------------------------------------------------------------------
 
 	protected function getRequestOriginalUriPathArray()
 	{
 		return Spine_GlobalRegistry::getRegistryValue('request', 'original_uri_path_array');
 	}
+	
+//------------------------------------------------------------------------------------
 	
 	public function checkCache($id)
 	{
@@ -81,6 +97,8 @@ class Spine_Master
 			return FALSE;
 	}
 	
+//------------------------------------------------------------------------------------
+	
 	public function cache($id, $data)
 	{
 		$filename	=	SITE.DS.'data'.DS.'cache'.DS.'query'.DS.md5($id);
@@ -92,6 +110,8 @@ class Spine_Master
 		else
 			return FALSE;
 	}
+	
+//------------------------------------------------------------------------------------
 	
 	public function unsetCache($id)
 	{
@@ -106,8 +126,24 @@ class Spine_Master
 		return FALSE;
 	}
 	
+//------------------------------------------------------------------------------------
+	
 	public function flushCache()
 	{
 		//remove the whole cache/query folder  
+	}
+	
+//------------------------------------------------------------------------------------
+	
+	public function registerToSpineRegistry($key, $value)
+	{
+		Spine_GlobalRegistry::register('application_registry', $key, $value);
+	}
+	
+//------------------------------------------------------------------------------------
+	
+	public function retrieveFromSpineRegistry($key)
+	{
+		return	Spine_GlobalRegistry::getRegistryValue('application_registry', $key);
 	}
 }
