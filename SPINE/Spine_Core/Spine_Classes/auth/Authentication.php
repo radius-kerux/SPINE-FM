@@ -50,7 +50,7 @@ class Auth
 		exit();
 	}
 	
-	public function checkAuth($redirect_url) //checks if access is authorized
+	public function checkAuth($redirect_url, $allow_redirect = TRUE) //checks if access is authorized
 	{
 		if (Spine_SessionRegistry::getSession('auth', 'spine_hash_key'))
 		{
@@ -58,7 +58,10 @@ class Auth
 		}
 		else
 		{
-			$this->redirect($redirect_url);
+			if ($allow_redirect)
+				$this->redirect($redirect_url);
+			else
+				return	FALSE;
 		}
 	}
 	
