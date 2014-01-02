@@ -4,6 +4,7 @@ class Spine_Response extends Spine_ViewRenderer
 {
 	public function displayOutput()
 	{
+		$this->createCacheFolder();
 		$this->renderTemplateStack();
 		$this->renderStylesheetStack();
 		$this->renderExternalStylesheetsStack();

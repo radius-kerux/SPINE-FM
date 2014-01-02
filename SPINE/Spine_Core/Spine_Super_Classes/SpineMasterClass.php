@@ -102,8 +102,11 @@ class Spine_Master
 	public function cache($id, $data)
 	{
 		$filename	=	SITE.DS.'data'.DS.'cache'.DS.'query'.DS.md5($id);
+		
+		is_dir(SITE.DS.'data'.DS.'cache'.DS.'query')?'':mkdir(SITE.DS.'data'.DS.'cache'.DS.'query');
+		
 		$data		=	serialize($data);
-		@file_put_contents($filename, $data);
+		file_put_contents($filename, $data);
 		
 		if (file_exists($filename))
 			return TRUE;

@@ -2,28 +2,66 @@
 
 class Spine_RequestOverride
 {
-
-	public function analyzeRequest()
+	public function processGlobalOverride()
 	{
-		include	SPINE_SYS.DS.'SpineDefaultOverrides'.DS.'OverrideAbstractClass.php';
-		include	SPINE_SYS.DS.'SpineDefaultOverrides'.DS.'DefaultOverride.php';
+		include_once	SPINE_SYS.DS.'SpineDefaultOverrides'.DS.'OverrideAbstractClass.php';
+		include_once	SPINE_SYS.DS.'SpineDefaultOverrides'.DS.'DefaultOverride.php';
 		
 		$has_user_defined_override	=	FALSE;
 		
 		$default_override	=	new Spine_DefaultOverride();
 		$overrides_array	=	$default_override->getOverrideArray();
 		
+		$original_uri_path_array	=	Spine_GlobalRegistry::getRegistryValue('request', 'original_uri_path_array');
+		if (file_exists('global_override.php'))
+		{
+			include 'global_override.php';
+			
+			$has_user_defined_override	=	TRUE;
+			$user_override				=	new globalOverride();
+			$user_overrides_array		=	$user_override->getOverrideArray();
+			$overrides_array			=	array_merge($overrides_array, $user_overrides_array);
+			
+			$this->modifyRequest($original_uri_path_array, $overrides_array, $user_override);
+		}
+		else
+			Spine_GlobalRegistry::register('request', 'uri_path_array', $original_uri_path_array);
+	}
+	
+	// -------------------------------------------------------------------------------------------------------------------
+
+	public function analyzeRequest()
+	{
+		include_once	SPINE_SYS.DS.'SpineDefaultOverrides'.DS.'OverrideAbstractClass.php';
+		include_once	SPINE_SYS.DS.'SpineDefaultOverrides'.DS.'DefaultOverride.php';
+		
+		$has_user_defined_override	=	FALSE;
+		
+		$default_override	=	new Spine_DefaultOverride();
+		$overrides_array	=	$default_override->getOverrideArray();
+		
+		$original_uri_path_array	=	Spine_GlobalRegistry::getRegistryValue('request', 'original_uri_path_array');
 		if (file_exists(SITE.DS.'override.php'))
 		{
 			include SITE.DS.'override.php';
+			
 			$has_user_defined_override	=	TRUE;
-			$user_override	=	new override();
-			$user_overrides_array	=	$user_override->getOverrideArray();
-			$overrides_array	=	array_merge($overrides_array, $user_overrides_array);
+			$user_override				=	new override();
+			$user_overrides_array		=	$user_override->getOverrideArray();
+			$overrides_array			=	array_merge($overrides_array, $user_overrides_array);
+			
+			$original_uri_path_array	=	Spine_GlobalRegistry::getRegistryValue('request', 'uri_path_array');
+			
+			$this->modifyRequest($original_uri_path_array, $overrides_array, $user_override);
 		}
-		
-		$original_uri_path_array	=	Spine_GlobalRegistry::getRegistryValue('request', 'original_uri_path_array');
-		
+		else
+			Spine_GlobalRegistry::register('request', 'uri_path_array', $original_uri_path_array);
+	}
+	
+	// -------------------------------------------------------------------------------------------------------------------
+	
+	private function modifyRequest($original_uri_path_array, $overrides_array, $user_override)
+	{
 		if (!empty($original_uri_path_array))
 		{
 			$override_mark	=	$original_uri_path_array[0];
@@ -69,6 +107,8 @@ class Spine_RequestOverride
 				//var_dump($original_uri_path_array);die;
 				Spine_GlobalRegistry::register('request', 'uri_path_array', $uri_path_array);
 			}
+			else 
+				Spine_GlobalRegistry::register('request', 'uri_path_array', $original_uri_path_array);
 		}
 		else
 			return 0;

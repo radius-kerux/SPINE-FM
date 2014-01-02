@@ -275,6 +275,8 @@ class Spine_SuperController extends Spine_Master
 		$method		=	Spine_GlobalRegistry::getRegistryValue('route', 'method'); //gets the invoked method
 		$filename	=	SITE.'/data/cache/templates/'.sha1($controller.$method.$id).'.phtml'; //set the file path of the cached output
 		
+		is_dir(SITE.'/data/cache/templates/')?'':mkdir(SITE.'/data/cache/templates/');
+		
 		if (file_exists($filename)) //checks if the file exists
 		{
 			//taken from http://css-tricks.com/snippets/php/intelligent-php-cache-control/

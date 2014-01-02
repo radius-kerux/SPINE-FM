@@ -18,14 +18,7 @@ class Spine_FrontController
 	
 	public function __construct()
 	{
-		if (file_exists('parameters.php'))
-		{
-			include 'parameters.php';
-		}
-		else
-		{
-			include 'SPINE/Spine_Core/SpineSys/Default_Parameters.php';
-		}
+		include 'SPINE/Spine_Core/SpineSys/Spine_Parameters.php';
 		
 		include 'SpineDirectoryStructure.php';
 		include SPINE_SYS.DS.'GlobalRegistry.php';
@@ -37,8 +30,11 @@ class Spine_FrontController
 	
 	public function init()
 	{
-		$this->initializeSystem();
+		$this->initializeSystem(); 
 		$this->handleUserRequest();
+		$this->handleGlobalOverride();
+		$this->loadProjectParameters();
+		$this->processUserRequest();
 		$this->handleRequestOverride();
 		$this->execPredefOverride();
 		$this->setUpRouting();
@@ -92,6 +88,34 @@ class Spine_FrontController
 	private function handleUserRequest()
 	{
 		Spine_GlobalRegistry::getRegistryValue('instance', 'request')->requestHandler();
+	}
+	
+	//------------------------------------------------------------------------------------
+	
+	private function handleGlobalOverride()
+	{
+		Spine_GlobalRegistry::getRegistryValue('instance', 'request_override')->processGlobalOverride();
+	}
+	
+	//------------------------------------------------------------------------------------
+	
+	private function loadProjectParameters()
+	{
+		if (file_exists('parameters.php'))
+		{
+			include 'parameters.php';
+		}
+		else
+		{
+			include 'SPINE/Spine_Core/SpineSys/Default_Parameters.php';
+		}
+	}
+	
+	//------------------------------------------------------------------------------------
+
+	private function processUserRequest()
+	{
+		Spine_GlobalRegistry::getRegistryValue('instance', 'request')->processRequest();
 		$this->_userRequest = Spine_GlobalRegistry::getRegistryValue('request', 'uri_path_array');
 	}
 	
@@ -101,7 +125,6 @@ class Spine_FrontController
 	{
 		Spine_GlobalRegistry::getRegistryValue('instance', 'request_override')->analyzeRequest();
 		$this->_userRequest = Spine_GlobalRegistry::getRegistryValue('request', 'uri_path_array');
-		//var_dump(Spine_GlobalRegistry::getRegistryValue('request', 'uri_path_array'));die;
 	}
 	
 	//------------------------------------------------------------------------------------
@@ -123,7 +146,7 @@ class Spine_FrontController
 	private function setUpRouting()
 	{
 		$params_start	=	Spine_GlobalRegistry::getRegistryValue('route', 'params_start_at');
-		//var_dump($params_start);
+
 		if ($params_start !== FALSE)
 		{
 			$this->_userRequest	=	array_splice($this->_userRequest, 0, $params_start);	
@@ -155,20 +178,7 @@ class Spine_FrontController
 		include SPINE_CLASSES.DS.'session/SpineSessionClass.php';
 		include SPINE_CLASSES.DS.'session/SpineSessionRegistry.php';
 		include SPINE_CLASSES.DS.'auth/SpineAuthentication.php';
-		
-		if (USE_SESSION)
-		{
-			new Spine_SessionRegistry();
-		}
 	}
 	
 	//------------------------------------------------------------------------------------
-	
-	public function test()
-	{
-		Spine_GlobalRegistry::getRegistryValue('instance', 'request')->requestHandler();
-	}
-
-	
-	
 }

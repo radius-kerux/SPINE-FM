@@ -45,6 +45,8 @@ class Spine_DefaultOverride extends Spine_OverrideAbstract
 		)
 	);
 	
+	// -------------------------------------------------------------------------------------------------------------------
+	
 	public function routeBlock()
 	{
 		try 
@@ -72,15 +74,21 @@ class Spine_DefaultOverride extends Spine_OverrideAbstract
 		
 	}
 	
+	// -------------------------------------------------------------------------------------------------------------------
+	
 	public function displayXml()
 	{
 		echo 'a sitemap must be put here';
 	}
 
+	// -------------------------------------------------------------------------------------------------------------------
+	
 	public function say($params)
 	{
 		echo 'HEY, '.$params[0].'---'.$params[1].'!!!';
 	}
+	
+	// -------------------------------------------------------------------------------------------------------------------
 	
 	public function showPHPInfo()
 	{

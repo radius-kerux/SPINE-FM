@@ -13,8 +13,6 @@ class Spine_Request
 		$this->uri['path'] = rtrim(ltrim($this->uri['path'], '/'), '/');
 		Spine_GlobalRegistry::register('request', 'uri_path', $this->uri['path']);
 		Spine_GlobalRegistry::register('request', 'original_uri_path_array', explode('/', $this->uri['path']));
-		$this->user_defined_routes	=	$this->getUserDefinedRouting();
-		Spine_GlobalRegistry::register('request', 'uri_path_array', $this->constructRequest(explode('/', $this->uri['path'])));
 
 		/*	if (($this->uri['path'] !== '') && ($this->uri['path'] !== '/'))
 		{
@@ -22,6 +20,15 @@ class Spine_Request
 		}
 		//$this->analyzeUriPath();
 	*/
+	}
+	
+	//------------------------------------------------------------------------------------
+	
+	public function processRequest()
+	{
+		$this->user_defined_routes	=	$this->getUserDefinedRouting();
+		$uri_path_array	=	Spine_GlobalRegistry::getRegistryValue('request', 'uri_path_array');
+		Spine_GlobalRegistry::register('request', 'uri_path_array', $this->constructRequest($uri_path_array));
 	}
 	/**
 	 * constructs request based on user defined configuration
@@ -112,7 +119,6 @@ class Spine_Request
 		if (isset($routes[$route]))
 		{
 			$new_route	=	$routes[$route];
-			
 		}
 	}
 	

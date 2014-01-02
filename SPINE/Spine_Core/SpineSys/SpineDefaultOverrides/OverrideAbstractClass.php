@@ -7,6 +7,8 @@ abstract class Spine_OverrideAbstract
 		return $this->overrides_array;
 	}
 	
+	// -------------------------------------------------------------------------------------------------------------------
+	
 	public function ec()
 	{
 		echo "<span styles='font-color:red;'> ECHO </span>".
@@ -21,15 +23,21 @@ abstract class Spine_OverrideAbstract
 		die();
 	}
 	
+	// -------------------------------------------------------------------------------------------------------------------
+	
 	public function showGR()
 	{
 		Spine_GlobalRegistry::register('override', 'showgr', TRUE);
 	}
 	
+	// -------------------------------------------------------------------------------------------------------------------
+	
 	public function install()
 	{
 		Spine_GlobalRegistry::register('override', 'install', TRUE);
 	}
+	
+	// -------------------------------------------------------------------------------------------------------------------
 	
 	public function clearCache()
 	{

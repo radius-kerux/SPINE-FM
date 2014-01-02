@@ -7,6 +7,13 @@
  */
 class Spine_ViewRenderer  extends Spine_SuperView
 {
+	
+	public function createCacheFolder()
+	{
+		if (!is_dir(SITE.'/data/cache/'))
+			mkdir(SITE.'/data/cache/');
+	}
+	
 	/**
 	 * 
 	 * Process the stackfull of phtml referrences for browser display
@@ -54,7 +61,7 @@ class Spine_ViewRenderer  extends Spine_SuperView
 				ob_end_clean();
 			}
 			else
-				 die('what is happening?');
+				 die('what is happening? '.$template);
 		}
 		
 		Spine_GlobalRegistry::register('response', 'final_template', $final_template);
