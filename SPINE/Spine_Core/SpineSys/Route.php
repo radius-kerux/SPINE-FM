@@ -99,7 +99,10 @@ class Spine_Route
 					Spine_GlobalRegistry::register('route','controller',$routeController);
 					Spine_GlobalRegistry::register('route', 'controller_accumulated_path', $accumulatedPath.DS);
 					
-					if (method_exists($routeController, $routeMethod))
+					//Instead of using the method_exists get_class_methods is used to do a case sensitive check ia method exists 
+					//if (method_exists($routeController, $routeMethod))
+					
+					if ((in_array($routeMethod, get_class_methods($routeController))))
 					{
 						Spine_GlobalRegistry::register('route','method',$routeMethod);
 					}
@@ -135,8 +138,10 @@ class Spine_Route
 					{
 						Spine_GlobalRegistry::register('route','controller',$routeController);
 						Spine_GlobalRegistry::register('route', 'controller_accumulated_path', $accumulatedPath.DS);
-						
-						if (method_exists($routeController , $routeMethod))
+
+						//Instead of using the method_exists get_class_methods is used to do a case sensitive check ia method exists 
+						//if (method_exists($routeController , $routeMethod))
+						if (in_array($routeMethod, get_class_methods($routeController)))
 						{
 							Spine_GlobalRegistry::register('route','method',$routeMethod);
 						}
@@ -190,6 +195,8 @@ class Spine_Route
 	
 	protected function aliasHandler($string)
 	{
+		$string	=	strtolower($string);
+
 		$new_string = '';
 		
 		foreach (explode('-', $string) as $index => $value)
@@ -197,7 +204,7 @@ class Spine_Route
 				$new_string .= ucfirst($value);
 			else
 				$new_string .= $value;
-		return $new_string;
+		return $new_string; 
 	}
 	
 }
